@@ -1,39 +1,93 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.0'
-	id 'io.spring.dependency-management' version '1.1.0'
-	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'org.openapi.generator' version '6.6.0'
+    id 'com.google.cloud.tools.jib' version '3.2.0'
 }
 
 group = 'com.mehrdad'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+springBoot {
+    mainClass = "com.mehrdad.todolist.TodoListApplication"
+}
+
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-	set('snippetsDir', file("build/generated-snippets"))
+    set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation 'org.testcontainers:junit-jupiter'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.testcontainers:junit-jupiter'
+
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
 }
 
 tasks.named('test') {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
+    outputs.dir snippetsDir
+    useJUnitPlatform()
 }
 
 tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
-	dependsOn test
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootDir/todolist.yaml"
+    outputDir = "$buildDir/generated-code"
+    apiPackage = "com.mehrdad.todolist.api"
+    modelPackage = "com.mehrdad.todolist.model"
+    typeMappings = [
+            OffsetDateTime:"LocalDateTime"   //replace the default open api date time representation with LocalDateTime
+    ]
+    importMappings = [
+            "java.time.OffsetDateTime":"java.time.LocalDateTime"
+    ]
+    configOptions = [
+            dateLibrary: "java8",
+            useBeanValidation: "true",
+            useSpringBoot3: "true",
+            nullable: "true",
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/generated-code/src/main/java"
+        }
+    }
+}
+
+
+jib {
+    from {
+        image = 'eclipse-temurin:17-jre-focal'
+    }
+    container {
+        jvmFlags = ['-Xms512m', '-Xmx1024m']
+    }
 }
