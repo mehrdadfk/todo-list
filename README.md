@@ -65,6 +65,8 @@ cd to todo-list
 docker run -p 8082:8082 todo-list:0.0.1-SNAPSHOT
 
 ```
+for manual testing the easiest way would be to import the [TodoItemSpecification.yaml](TodoItemSpecification.yaml) to postman 
+and run the endpoints
 
 ### Possible improvement in case of having more time
 1. usually having id as type long is not a good practice as it make cause problem in data migrations and communication with other systems.
