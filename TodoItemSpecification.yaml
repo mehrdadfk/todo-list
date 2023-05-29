@@ -59,18 +59,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TodoItem'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: entity by id not found
           content:
@@ -196,6 +184,9 @@ components:
           type: array
           items:
               $ref: '#/components/schemas/ValidationError'
+      required:
+        - status
+        - message
 
     ValidationError:
       type: object
@@ -204,10 +195,6 @@ components:
           type: string
         message:
           type: string
-    SuccessResponse:
-      type: object
-      properties:
-        data:
-          type: object
-        message:
-          type: string
+      required:
+        - field
+        - message

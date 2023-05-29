@@ -1,7 +1,6 @@
 package com.mehrdad.todolist.services;
 
 import com.mehrdad.todolist.exceptions.EntityNotFoundException;
-import com.mehrdad.todolist.model.TodoItemDTO;
 import com.mehrdad.todolist.models.TodoItem;
 import com.mehrdad.todolist.repositories.TodoItemRepository;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 
 @Service

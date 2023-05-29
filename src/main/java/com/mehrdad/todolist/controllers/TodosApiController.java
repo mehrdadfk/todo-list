@@ -38,19 +38,9 @@ public class TodosApiController implements TodosApi {
     @Autowired
     TodoItemService todoItemService;
 
-    private final NativeWebRequest request;
-
-    @Autowired
-    public TodosApiController(NativeWebRequest request) {
-        this.request = request;
-    }
-
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.ofNullable(request);
-    }
-
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<TodoItemDTO> createTodo(@Valid @RequestBody NewTodoItemDTO newTodoItem
     ) {
@@ -61,6 +51,9 @@ public class TodosApiController implements TodosApi {
         return ResponseEntity.created(URI.create("/" + persisted.getId())).body(persistedDto);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<List<TodoItemDTO>> getAll(@Valid @RequestParam(value = "only_not_done", defaultValue = "true") Boolean onlyNotDone) {
         List<TodoItemDTO> all = todoItemService.getAll(onlyNotDone)
@@ -70,6 +63,9 @@ public class TodosApiController implements TodosApi {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseEntity<TodoItemDTO> getTodoById(@PathVariable("id") String id) {
 
         TodoItem todoItemById = todoItemService.getTodoItemById(Long.valueOf(id));
@@ -79,6 +75,9 @@ public class TodosApiController implements TodosApi {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<TodoItemDTO> markTodoAsDone(@PathVariable("id") String id) {
 
@@ -87,8 +86,11 @@ public class TodosApiController implements TodosApi {
         return ResponseEntity.ok(todoItemDTO);
 
     }
-    @Override
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ResponseEntity<TodoItemDTO> markTodoAsNotDone(@PathVariable("id") String id) {
 
         TodoItem todoItem = todoItemService.markTodoAsNotDone(Long.valueOf(id));
@@ -96,6 +98,9 @@ public class TodosApiController implements TodosApi {
         return ResponseEntity.ok(todoItemDTO);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseEntity<TodoItemDTO> updateTodoDescription(@PathVariable("id") String id, @Valid @RequestBody UpdateTodoItemDTO updateTodoItemDTO) {
 
         TodoItem todoItem = todoItemService.updateTodoDescription(Long.valueOf(id), updateTodoItemDTO.getDescription() );
@@ -103,11 +108,4 @@ public class TodosApiController implements TodosApi {
         return ResponseEntity.ok(todoItemDTO);
 
     }
-
-
-
-
-
-
-
 }
