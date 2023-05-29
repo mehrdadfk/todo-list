@@ -1,6 +1,7 @@
 package com.mehrdad.todolist.services;
 
 import com.mehrdad.todolist.models.TodoItem;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,4 +51,6 @@ public interface TodoItemService {
      * @return updated Item
      */
     TodoItem markTodoAsNotDone(Long id);
+
+    void handleTodoItemStatusPastDue();
 }

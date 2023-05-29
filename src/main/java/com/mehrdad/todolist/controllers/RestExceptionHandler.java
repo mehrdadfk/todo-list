@@ -50,4 +50,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, BAD_REQUEST);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<Object> handleIllegalArgumentException(
+            IllegalArgumentException ex) {
+        ErrorResponseDTO apiError = new ErrorResponseDTO(BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<>(apiError, BAD_REQUEST);
+    }
 }

@@ -35,3 +35,10 @@ please note that since the database is on memory, I did not use test container t
 to support I18n, the field "message" in [SuccessResponseDTO.java] and [ErrorResponseDTO.java] could be a key that 
 will be handled by client to extract the corresponding translation. since it is not recommended that server handles 
 the translation, for now we just send an english message.
+
+
+### Assumptions
+1. due date can not be in past 
+2. due date can be null
+3. the automatic service for updating the past due items will update only the items in not done status
+4. 

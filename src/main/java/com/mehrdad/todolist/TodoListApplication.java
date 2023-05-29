@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(
 		nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
 		basePackages = {"org.openapitools", "com.mehrdad.todolist" , "org.openapitools.configuration"},
 		nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
+@EnableScheduling
 public class TodoListApplication {
 
 	public static void main(String[] args) {
