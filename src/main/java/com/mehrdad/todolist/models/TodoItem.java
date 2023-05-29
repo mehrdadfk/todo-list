@@ -1,11 +1,13 @@
 package com.mehrdad.todolist.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.mehrdad.todolist.model.TodoItemDTO;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import com.mehrdad.todolist.model.TodoItemDTO.StatusEnum;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -17,10 +19,24 @@ public class TodoItem {
     private Long id;
     @NotBlank(message = "Description is required")
     private String description;
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private StatusEnum status;
+    @CreationTimestamp
     private LocalDateTime createdAt;
     private LocalDateTime dueDateTime;
     private LocalDateTime completedAt;
+
+    public enum StatusEnum {
+        NOT_DONE,
+
+        DONE,
+
+        PAST_DUE
+
+
+
+    }
 
     public Long getId() {
         return id;

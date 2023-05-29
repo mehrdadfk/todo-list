@@ -28,3 +28,10 @@ I chose google jib as it abstracts away the complexities of Dockerfile. although
 flexibility, jib provides a simpler way that does not need docker daemon to build the container. 
 although, since I am not using a remote docker repository, for building and running this project the docker daemon 
 needs to be running.
+please note that since the database is on memory, I did not use test container to run the integration tests on docker container.
+
+
+### I18n support 
+to support I18n, the field "message" in [SuccessResponseDTO.java] and [ErrorResponseDTO.java] could be a key that 
+will be handled by client to extract the corresponding translation. since it is not recommended that server handles 
+the translation, for now we just send an english message.

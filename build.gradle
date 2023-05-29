@@ -32,7 +32,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.testcontainers:junit-jupiter'
 
@@ -56,21 +55,22 @@ tasks.named('asciidoctor') {
 
 openApiGenerate {
     generatorName = "spring"
-    inputSpec = "$rootDir/todolist.yaml"
+    inputSpec = "$rootDir/TodoItemSpecification.yaml"
     outputDir = "$buildDir/generated-code"
     apiPackage = "com.mehrdad.todolist.api"
     modelPackage = "com.mehrdad.todolist.model"
+    modelNameSuffix = "DTO"
     typeMappings = [
             OffsetDateTime:"LocalDateTime"   //replace the default open api date time representation with LocalDateTime
     ]
     importMappings = [
-            "java.time.OffsetDateTime":"java.time.LocalDateTime"
+            "java.time.OffsetDateTime":"java.time.LocalDateTime",
     ]
     configOptions = [
             dateLibrary: "java8",
             useBeanValidation: "true",
             useSpringBoot3: "true",
-            nullable: "true",
+            nullable: "true"
     ]
 }
 

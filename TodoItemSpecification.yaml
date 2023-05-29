@@ -1,0 +1,213 @@
+openapi: 3.0.3
+info:
+  title: Todo Service API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082
+paths:
+  /todos:
+    get:
+      summary: Get all todo items
+      operationId: getAll
+      parameters:
+        - in: query
+          name: only_not_done
+          schema:
+            type: boolean
+            default: true
+          required: false
+          description: Option to retrieve all items or only not done ones
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoItem'
+    post:
+      summary: Add a new todo item
+      operationId: createTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTodoItem'
+      responses:
+        '201':
+          description: Todo item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+  /todos/{id}:
+    get:
+      operationId: getTodoById
+      summary: Get details of a specific todo item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: entity by id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: Update description of a todo item
+      operationId: updateTodoDescription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoItem'
+      responses:
+        '200':
+          description: Todo item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+
+  /todos/{id}/done:
+    put:
+      summary: Mark a todo item as done
+      operationId: markTodoAsDone
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Todo item marked as done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+
+  /todos/{id}/not-done:
+    put:
+      summary: Mark a todo item as not done
+      operationId: markTodoAsNotDone
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Todo item marked as not done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoItem'
+
+components:
+  schemas:
+    TodoItem:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: ["not done", "done", "past due"]
+        createdAt:
+          type: string
+          format: date-time
+        dueDateTime:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - description
+        - status
+        - createdAt
+        - dueDateTime
+
+    NewTodoItem:
+      type: object
+      properties:
+        description:
+          type: string
+        dueDateTime:
+          type: string
+          format: date-time
+      required:
+        - description
+
+    UpdateTodoItem:
+      type: object
+      properties:
+        description:
+          type: string
+      required:
+        - description
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        stackTrace:
+          type: string
+        errors:
+          type: array
+          items:
+              $ref: '#/components/schemas/ValidationError'
+
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string

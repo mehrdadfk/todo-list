@@ -1,24 +1,84 @@
 package com.mehrdad.todolist.services;
 
+import com.mehrdad.todolist.exceptions.EntityNotFoundException;
+import com.mehrdad.todolist.model.TodoItemDTO;
 import com.mehrdad.todolist.models.TodoItem;
+import com.mehrdad.todolist.repositories.TodoItemRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 
 @Service
 public class TodoItemServiceImpl implements TodoItemService {
 
-    List<TodoItem> items;
-    public TodoItemServiceImpl() {
-        this.items = new ArrayList<>();
+    final TodoItemRepository todoItemRepository;
+
+    public TodoItemServiceImpl(TodoItemRepository todoItemRepository) {
+
+        this.todoItemRepository = todoItemRepository;
     }
 
     @Override
     public TodoItem createTodoItem(TodoItem item) {
-
-        items.add(item);
-
-        return item;
+        item.setStatus(TodoItem.StatusEnum.NOT_DONE); //by default a new item should be in not done state
+        item.setCreatedAt(LocalDateTime.now());
+        return todoItemRepository.save(item);
     }
+
+    @Override
+    public List<TodoItem> getAll(Boolean onlyNotDone) {
+        if (Boolean.TRUE.equals(onlyNotDone)) {
+            return todoItemRepository.findAllByStatusNotDone();
+        } else return todoItemRepository.findAll();
+    }
+
+    @Override
+    public TodoItem getTodoItemById(Long id) {
+
+        Optional<TodoItem> todoItemById = todoItemRepository.findById(id);
+
+        return todoItemById.orElseThrow(() -> new EntityNotFoundException(TodoItem.class, "id", id.toString()));
+    }
+
+    @Override
+    public TodoItem updateTodoDescription(Long id, String description) {
+        Optional<TodoItem> todoItemById = todoItemRepository.findById(id);
+        TodoItem todoItem = todoItemById.orElseThrow(() -> new EntityNotFoundException(TodoItem.class, "id", id.toString()));
+
+        todoItem.setDescription(description);
+        todoItemRepository.save(todoItem);
+        return todoItem;
+    }
+
+    @Override
+    public TodoItem markTodoAsDone(Long id) {
+        Optional<TodoItem> todoItemById = todoItemRepository.findById(id);
+        TodoItem todoItem = todoItemById.orElseThrow(() -> new EntityNotFoundException(TodoItem.class, "id", id.toString()));
+
+        if(todoItem.getStatus().equals(TodoItem.StatusEnum.PAST_DUE))
+            throw new IllegalArgumentException("Cannot mark a 'past due' task as done.");
+        else {
+            todoItem.setStatus(TodoItem.StatusEnum.DONE);
+            todoItemRepository.save(todoItem);
+        }
+        return todoItem;
+    }
+
+    @Override
+    public TodoItem markTodoAsNotDone(Long id) {
+        Optional<TodoItem> todoItemById = todoItemRepository.findById(id);
+        TodoItem todoItem = todoItemById.orElseThrow(() -> new EntityNotFoundException(TodoItem.class, "id", id.toString()));
+        if(todoItem.getStatus().equals(TodoItem.StatusEnum.PAST_DUE))
+            throw new IllegalArgumentException("Cannot mark a 'past due' task as done.");
+        else {
+            todoItem.setStatus(TodoItem.StatusEnum.NOT_DONE);
+            todoItemRepository.save(todoItem);
+        }
+        return todoItem;
+    }
+
 }
