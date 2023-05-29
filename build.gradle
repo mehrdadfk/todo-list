@@ -57,7 +57,7 @@ tasks.named('asciidoctor') {
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/TodoItemSpecification.yaml"
-    outputDir = "$buildDir/generated-code"
+    outputDir = "$rootDir/generated-code"
     apiPackage = "com.mehrdad.todolist.api"
     modelPackage = "com.mehrdad.todolist.model"
     modelNameSuffix = "DTO"
@@ -75,10 +75,14 @@ openApiGenerate {
     ]
 }
 
+compileJava {
+    dependsOn tasks.openApiGenerate
+}
+
 sourceSets {
     main {
         java {
-            srcDir "$buildDir/generated-code/src/main/java"
+            srcDir "$rootDir/generated-code/src/main/java"
         }
     }
 }

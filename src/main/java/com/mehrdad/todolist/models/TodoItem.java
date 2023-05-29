@@ -1,11 +1,7 @@
 package com.mehrdad.todolist.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.mehrdad.todolist.model.TodoItemDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import com.mehrdad.todolist.model.TodoItemDTO.StatusEnum;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,7 +29,6 @@ public class TodoItem {
         DONE,
 
         PAST_DUE
-
 
 
     }

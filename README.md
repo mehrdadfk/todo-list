@@ -23,6 +23,11 @@ I have assumed that application requires complex querying, such as retrieving ta
 performing aggregations. that is why a relational database might be more suitable as also using H2 is one of the
 Non-functional requirements for this challenge. 
 
+### Contract first api design 
+using this will help the process of documentation and development in realworld projects. that is why 
+I used open api specification version 3.1 and generated the dtos and controller interface using the gradle plugin. 
+I also added the generated codes to git repo for reference. 
+
 ### Containerization
 I chose google jib as it abstracts away the complexities of Dockerfile. although having a docker file could give more 
 flexibility, jib provides a simpler way that does not need docker daemon to build the container. 
@@ -41,4 +46,31 @@ the translation, for now we just send an english message.
 1. due date can not be in past 
 2. due date can be null
 3. the automatic service for updating the past due items will update only the items in not done status
-4. 
+4. the automatic service for updating the items is implemented with a scheduler, but it in terms of performance would be 
+better to do it using an event listener coming from for example a refresh page from user. 
+
+### How to run
+```
+git clone git@github.com:mehrdadfk/todo-list.git
+cd to todo-list
+
+
+#to build and test
+./gradlew build
+
+#to creat the container on local repo 
+./gradlew jibDockerBuild
+
+#to run
+docker run -p 8082:8082 todo-list:0.0.1-SNAPSHOT
+
+```
+
+### Possible improvement in case of having more time
+1. usually having id as type long is not a good practice as it make cause problem in data migrations and communication with other systems.
+that is why depending on the application id can be string or UUID.
+2. I would like to add more tests specially running some performance tests and some automatic scenario based tests using 
+libraries like cucumber. 
+3. in terms of functional requirments would be nice to have some more features like category of to do items 
+
+

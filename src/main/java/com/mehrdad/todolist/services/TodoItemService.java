@@ -1,11 +1,8 @@
 package com.mehrdad.todolist.services;
 
 import com.mehrdad.todolist.models.TodoItem;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 
 /**

@@ -8,10 +8,9 @@ import com.mehrdad.todolist.services.PastDueScheduler;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,14 +45,14 @@ class TodoItemIntegrationTest {
     @Autowired
     private TodoItemRepository todoItemRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         // reset DB
         todoItemRepository.deleteAll();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
 
         // reset DB
@@ -61,7 +60,7 @@ class TodoItemIntegrationTest {
     }
 
     @Test
-    public void givenEmployees_whenGetAll_thenReturnEmployess() throws Exception {
+    void givenEmployees_whenGetAll_thenReturnEmployess() throws Exception {
 
         // given
         final String shoppingDes = "shop";
@@ -105,7 +104,6 @@ class TodoItemIntegrationTest {
     }
 
     @Test
-    @MethodSource
     void givenTodoItem_whenPost_thenCreateAndTodoItem() throws Exception {
 
         // given
@@ -150,7 +148,7 @@ class TodoItemIntegrationTest {
     }
 
     @Test
-    public void whenWaitOneSecond_thenScheduledIsCalledAndStatusIsChanged() {
+    void whenWaitOneSecond_thenScheduledIsCalledAndStatusIsChanged() {
         final String before = "before";
         createTodoItem(before, true);
         await()
@@ -164,7 +162,7 @@ class TodoItemIntegrationTest {
     }
 
     @Test
-    public void whenWaitOneSecond_thenScheduledIsCalledAndStatusIsNotChanged() {
+    void whenWaitOneSecond_thenScheduledIsCalledAndStatusIsNotChanged() {
         final String after = "after";
         createTodoItem(after, false);
         await()

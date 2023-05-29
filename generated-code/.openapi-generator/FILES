@@ -1,0 +1,10 @@
+src/main/java/com/mehrdad/todolist/api/ApiUtil.java
+src/main/java/com/mehrdad/todolist/api/TodosApi.java
+src/main/java/com/mehrdad/todolist/model/ErrorResponseDTO.java
+src/main/java/com/mehrdad/todolist/model/NewTodoItemDTO.java
+src/main/java/com/mehrdad/todolist/model/TodoItemDTO.java
+src/main/java/com/mehrdad/todolist/model/UpdateTodoItemDTO.java
+src/main/java/com/mehrdad/todolist/model/ValidationErrorDTO.java
+src/main/java/org/openapitools/configuration/HomeController.java
+src/main/java/org/openapitools/configuration/SpringDocConfiguration.java
+src/main/resources/openapi.yaml

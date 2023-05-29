@@ -3,7 +3,6 @@ package com.mehrdad.todolist.services;
 import com.mehrdad.todolist.exceptions.EntityNotFoundException;
 import com.mehrdad.todolist.models.TodoItem;
 import com.mehrdad.todolist.repositories.TodoItemRepository;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Override
     public TodoItem createTodoItem(TodoItem item) {
         item.setStatus(TodoItem.StatusEnum.NOT_DONE); //by default a new item should be in not done state
-        if (item.getDueDateTime().isBefore(LocalDateTime.now())) {
+        if (item.getDueDateTime() != null && item.getDueDateTime().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("The dueDateTime cannot be in the past.");
         }
         item.setCreatedAt(LocalDateTime.now());
